@@ -1,23 +1,38 @@
-import { Avatar } from "@/components/shared/avatar";
-import type { LinkedParent } from "@/data/kids";
+import { Avatar, type AvatarTone } from "@/components/shared/avatar";
+import type { LinkedParent, ParentRelation } from "@/data/kids";
 
 type ParentRowProps = {
   parent: LinkedParent;
 };
 
+type ParentLabels = {
+  detail: string;
+  badge: string;
+};
+
+const RELATION_TONES: Record<ParentRelation, AvatarTone> = {
+  Mamá: "lilac",
+  Papá: "blue",
+  "Tutor/a": "mint",
+};
+
+const ACTIVE_LABELS: Record<ParentRelation, ParentLabels> = {
+  Mamá: { detail: "activa", badge: "ACTIVA" },
+  Papá: { detail: "activo", badge: "ACTIVO" },
+  "Tutor/a": { detail: "activo/a", badge: "ACTIVO/A" },
+};
+
+const PENDING_LABELS: ParentLabels = {
+  detail: "invitación enviada",
+  badge: "PENDIENTE",
+};
+
 export function ParentRow({ parent }: ParentRowProps) {
   const isActive = parent.status === "active";
-  const tone = parent.relation === "Mamá" ? "lilac" : "blue";
-  const detail = isActive
-    ? parent.relation === "Mamá"
-      ? "activa"
-      : "activo"
-    : "invitación enviada";
-  const badge = isActive
-    ? parent.relation === "Mamá"
-      ? "ACTIVA"
-      : "ACTIVO"
-    : "PENDIENTE";
+  const tone = RELATION_TONES[parent.relation];
+  const { detail, badge } = isActive
+    ? ACTIVE_LABELS[parent.relation]
+    : PENDING_LABELS;
   const relationLabel = `${parent.relation} · ${detail}`;
 
   return (

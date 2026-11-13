@@ -72,6 +72,11 @@
   --color-consent-bg: #fbf1d6;
   --color-consent-box: #5fb97e;
   --color-consent-ink: #8a7234;
+  --color-consent-line: #e6d08a;
+  --color-consent-label: #a88526;
+  --color-info-panel: #e3ecfb;
+  --color-info-copy: #3f5694;
+  --color-relation-line: #9fb8ec;
 
   --font-sans: var(--font-nunito);
   --font-heading: var(--font-fredoka);

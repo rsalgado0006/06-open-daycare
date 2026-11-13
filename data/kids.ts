@@ -24,11 +24,13 @@ export type KidTone = "sky" | "rose" | "mint" | "sun" | "violet";
 
 export type ParentStatus = "active" | "pending";
 
+export type ParentRelation = "Mamá" | "Papá" | "Tutor/a";
+
 export type LinkedParent = {
   id: string;
   name: string;
   initial: string;
-  relation: "Mamá" | "Papá";
+  relation: ParentRelation;
   status: ParentStatus;
 };
 
@@ -43,6 +45,15 @@ export type Kid = {
   admission: string;
   alert?: { cardLabel: string; body: string };
   parents: LinkedParent[];
+};
+
+export type ParentInvite = {
+  id: string;
+  kidId: string;
+  name: string;
+  email: string;
+  relation: ParentRelation;
+  createdAt: string;
 };
 
 export const kids: Kid[] = [
@@ -216,6 +227,66 @@ export const kids: Kid[] = [
 
 export function getKid(id: string): Kid | undefined {
   return kids.find((kid) => kid.id === id);
+}
+
+export const parentInvitesStorageKey = "opendaycare:parent-invites:v1";
+
+const parentRelations: ParentRelation[] = ["Mamá", "Papá", "Tutor/a"];
+
+const inviteCodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+const inviteCodeLength = 5;
+
+export function generateInviteCode(): string {
+  const randomValues = new Uint32Array(inviteCodeLength);
+
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    crypto.getRandomValues(randomValues);
+  } else {
+    for (let index = 0; index < randomValues.length; index += 1) {
+      randomValues[index] = Math.floor(Math.random() * 4294967296);
+    }
+  }
+
+  return Array.from(
+    randomValues,
+    (value) => inviteCodeAlphabet[value % inviteCodeAlphabet.length],
+  ).join("");
+}
+
+export function inviteToLinkedParent(invite: ParentInvite): LinkedParent {
+  const name = invite.name.trim();
+
+  return {
+    id: invite.id,
+    name,
+    initial: name.charAt(0).toLocaleUpperCase("es-AR"),
+    relation: invite.relation,
+    status: "pending",
+  };
+}
+
+export function isParentInvite(value: unknown): value is ParentInvite {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const invite = value as Record<string, unknown>;
+
+  return (
+    typeof invite.id === "string" &&
+    invite.id.length > 0 &&
+    typeof invite.kidId === "string" &&
+    invite.kidId.length > 0 &&
+    typeof invite.name === "string" &&
+    invite.name.trim().length > 0 &&
+    typeof invite.email === "string" &&
+    invite.email.trim().length > 0 &&
+    typeof invite.relation === "string" &&
+    parentRelations.includes(invite.relation as ParentRelation) &&
+    typeof invite.createdAt === "string" &&
+    !Number.isNaN(new Date(invite.createdAt).getTime())
+  );
 }
 
 export type CreatedKid = {

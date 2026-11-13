@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ParentRow } from "@/components/kids/parent-row";
+import { LinkedParentsCard } from "@/components/kids/linked-parents-card";
 import { Avatar } from "@/components/shared/avatar";
 import {
   AlertTriangleIcon,
   ChevronLeftIcon,
   DaySummaryIcon,
-  PlusOutlineIcon,
 } from "@/components/shared/icons";
 import { getKid, room } from "@/data/kids";
 
@@ -103,29 +102,11 @@ export async function KidProfile({ params }: KidProfileProps) {
             Resumen del día
           </span>
 
-          <div className="rounded-2xl border border-edge bg-card px-[18px] py-4">
-            <div className="mb-[14px] text-[12.5px] font-extrabold tracking-[.8px] text-label">
-              PADRES VINCULADOS
-            </div>
-
-            <div className="flex flex-col gap-[14px]">
-              {kid.parents.map((parent) => (
-                <ParentRow key={parent.id} parent={parent} />
-              ))}
-
-              <span
-                title="Próximamente"
-                className="flex items-center gap-3 pt-2"
-              >
-                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border-[1.5px] border-dashed border-[var(--color-dashed)] text-media-ink">
-                  <PlusOutlineIcon />
-                </span>
-                <span className="text-[14.5px] font-extrabold text-edit">
-                  Vincular otro padre
-                </span>
-              </span>
-            </div>
-          </div>
+          <LinkedParentsCard
+            kidId={kid.id}
+            kidName={kid.name}
+            parents={kid.parents}
+          />
         </div>
       </div>
     </div>
