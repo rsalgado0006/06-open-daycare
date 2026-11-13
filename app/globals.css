@@ -21,10 +21,18 @@
   --color-edit: #c5503a;
   --color-heart: #e0654a;
 
+  --color-badge-food: #f7e7a6;
+  --color-badge-food-ink: #9a7b1e;
+  --color-badge-nap: #e7dcf6;
+  --color-badge-nap-ink: #7b5fc0;
   --color-badge-achievement: #cfebd8;
   --color-badge-achievement-ink: #3e9b6c;
   --color-badge-activity: #c7e7f1;
   --color-badge-activity-ink: #2e89a6;
+  --color-badge-mood: #f9d2de;
+  --color-badge-mood-ink: #c56486;
+  --color-badge-photo: #fbd8cc;
+  --color-badge-photo-ink: #d9684a;
   --color-badge-announcement: #ccd8f4;
   --color-badge-announcement-ink: #4e72c8;
 
