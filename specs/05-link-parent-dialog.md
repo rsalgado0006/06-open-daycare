@@ -139,29 +139,29 @@ Cada paso deja el sistema compilando y navegable.
 
 ## Criterios de aceptación
 
-- [ ] `/kids/mateo-fernandez` responde 200 y la consola no muestra errores ni warnings de hidratación.
-- [ ] «Vincular otro padre» es un `<button>` que abre `dialog[open]` sin cambiar la URL.
-- [ ] A `1280×800`, la tarjeta del pop-up mide 480px y coincide con `vincular-padre.dc.html` en colores, tipografías, tamaños y espaciados, salvo el backdrop; evidencia en `.playwright-mcp/`.
-- [ ] El header muestra «Vincular padre», «a Mateo Fernández» y una X de 34×34 que cierra el pop-up.
-- [ ] El banner dice «Le enviaremos un correo con un código para que active su cuenta. Solo verá el feed de Mateo.».
-- [ ] El formulario muestra NOMBRE DEL PADRE/MADRE, EMAIL, PARENTESCO con Mamá, Papá y Tutor/a, y CÓDIGO DE INVITACIÓN; «Mamá» arranca seleccionada con `aria-checked="true"`.
-- [ ] Enviar con nombre y email vacíos muestra un error inline debajo de cada uno, no guarda nada y enfoca el nombre.
-- [ ] Un email inválido como `diego@` muestra «Ingresá un email válido.», enfoca el email y no guarda.
-- [ ] El código tiene 5 caracteres de `ABCDEFGHJKLMNPQRSTUVWXYZ23456789` y cambia entre dos aperturas del pop-up; «Vence en 7 días» está visible.
-- [ ] Elegir «Papá» deja esa pill seleccionada y deselecciona Mamá.
-- [ ] Un envío válido escribe en localStorage bajo `opendaycare:parent-invites:v1` un objeto con `id`, `kidId`, `name`, `email`, `relation` y `createdAt`; el pop-up se cierra y el formulario queda limpio.
-- [ ] La fila nueva aparece al final de las filas, antes de la acción, con inicial, nombre, «Papá · invitación enviada» y badge PENDIENTE.
-- [ ] Tras recargar, la fila nueva sigue ahí.
-- [ ] Invitar de nuevo el mismo email al mismo niño muestra «Ya vinculaste a este email.» y no duplica la fila.
-- [ ] El mismo email invitado a otro niño se acepta y aparece solo en ese perfil.
-- [ ] La X, Escape y el clic en el backdrop cierran el pop-up; el foco vuelve al botón y el `overflow` de `<main>` queda restaurado.
-- [ ] `/kids/valentina-soto` muestra el panel vacío con la acción y permite enviar la primera invitación.
-- [ ] Los 8 perfiles conservan sus filas demo con los mismos nombres, detalles y badges.
-- [ ] Las tarjetas de `/kids` siguen mostrando el conteo de padres demo después de invitar.
-- [ ] Solo `components/kids/linked-parents-card.tsx` y `components/kids/link-parent-dialog.tsx` agregan `"use client"`; ningún otro archivo existente lo agrega.
-- [ ] Todos los identificadores nuevos están en inglés; los únicos textos en español son los de la UI y los valores de `data/kids.ts`.
-- [ ] `npx tsc --noEmit`, `npx eslint app components data` y `npm run build` terminan sin errores; el build sigue prerenderizando los 8 perfiles.
-- [ ] `npm run lint` sigue fallando solo por `references/pantallas/support.js`, sin cambios en ese archivo generado.
+- [x] ✅ `/kids/mateo-fernandez` responde 200 y la consola no muestra errores ni warnings de hidratación. — Playwright a `1280×800`: navegación OK; consola de la sesión con 0 errores y 0 warnings (solo React DevTools e HMR).
+- [x] ✅ «Vincular otro padre» es un `<button>` que abre `dialog[open]` sin cambiar la URL. — Snapshot (`button "Vincular otro padre"`) y `document.querySelector("dialog[open]")` true con URL `/kids/mateo-fernandez`.
+- [x] ✅ A `1280×800`, la tarjeta del pop-up mide 480px y coincide con `vincular-padre.dc.html` en colores, tipografías, tamaños y espaciados, salvo el backdrop; evidencia en `.playwright-mcp/`. — Comparación de estilos computados (`.playwright-mcp/app-styles.json`) contra los estilos inline del mockup: tarjeta 480px, fondo/borde/radio/sombra, header, banner, labels, inputs, pills, código y CTA exactos; capturas `spec05-dialog-1280.png` y `spec05-mockup-1280.png`. Corregido en `app/globals.css` + `components/kids/linked-parents-card.tsx`: el token `--color-dashed` generaba una utilidad-color `.border-dashed` que colisionaba con la de estilo y pisaba el borde `#E6D08A` de la caja del código; se renombró a `--color-dashed-ring`.
+- [x] ✅ El header muestra «Vincular padre», «a Mateo Fernández» y una X de 34×34 que cierra el pop-up. — Snapshot + `getBoundingClientRect` de la X: 34×34; cierre verificado.
+- [x] ✅ El banner dice «Le enviaremos un correo con un código para que active su cuenta. Solo verá el feed de Mateo.». — Texto exacto leído del DOM; con Valentina muestra «Solo verá el feed de Valentina.».
+- [x] ✅ El formulario muestra NOMBRE DEL PADRE/MADRE, EMAIL, PARENTESCO con Mamá, Papá y Tutor/a, y CÓDIGO DE INVITACIÓN; «Mamá» arranca seleccionada con `aria-checked="true"`. — DOM: `role="radio"` ×3 con `aria-checked` true/false/false.
+- [x] ✅ Enviar con nombre y email vacíos muestra un error inline debajo de cada uno, no guarda nada y enfoca el nombre. — «Ingresá el nombre.» / «Ingresá el email.» con `aria-invalid`, foco en el input de nombre, localStorage intacto (null); captura `spec05-validation-1280.png`.
+- [x] ✅ Un email inválido como `diego@` muestra «Ingresá un email válido.», enfoca el email y no guarda. — Error exacto, `document.activeElement` = input email, storage null.
+- [x] ✅ El código tiene 5 caracteres de `ABCDEFGHJKLMNPQRSTUVWXYZ23456789` y cambia entre dos aperturas del pop-up; «Vence en 7 días» está visible. — `MFACD` → `Q7YCZ` entre dos aperturas, ambos del alfabeto; «Vence en 7 días» visible.
+- [x] ✅ Elegir «Papá» deja esa pill seleccionada y deselecciona Mamá. — `aria-checked` true/false y colores `#CCD8F4`/`#FFFDF9`; captura `spec05-relation-papa-1280.png`.
+- [x] ✅ Un envío válido escribe en localStorage bajo `opendaycare:parent-invites:v1` un objeto con `id`, `kidId`, `name`, `email`, `relation` y `createdAt`; el pop-up se cierra y el formulario queda limpio. — Objeto completo con `id` `mateo-fernandez:maria@ejemplo.com` y `createdAt` ISO; dialog cerrado, campos vacíos y parentesco en «Mamá».
+- [x] ✅ La fila nueva aparece al final de las filas, antes de la acción, con inicial, nombre, «Papá · invitación enviada» y badge PENDIENTE. — Panel: Lucía, Diego, María Gutiérrez (avatar azul, inicial M) y acción al final; captura `spec05-after-invite-1280.png`.
+- [x] ✅ Tras recargar, la fila nueva sigue ahí. — Reload de `/kids/mateo-fernandez`: «María Gutiérrez» persiste.
+- [x] ✅ Invitar de nuevo el mismo email al mismo niño muestra «Ya vinculaste a este email.» y no duplica la fila. — Reintento con `MARIA@EJEMPLO.COM` (mayúsculas): error exacto, storage con 1 sola entrada, panel sin duplicados.
+- [x] ✅ El mismo email invitado a otro niño se acepta y aparece solo en ese perfil. — `maria@ejemplo.com` aceptado en Valentina; Sofía y Mateo no muestran la fila ajena; storage guarda el array completo por `kidId`.
+- [x] ✅ La X, Escape y el clic en el backdrop cierran el pop-up; el foco vuelve al botón y el `overflow` de `<main>` queda restaurado. — Los tres métodos probados; `document.activeElement` = botón «Vincular otro padre» y `overflow` `auto` tras cada cierre (`hidden` mientras estaba abierto).
+- [x] ✅ `/kids/valentina-soto` muestra el panel vacío con la acción y permite enviar la primera invitación. — Panel con solo la acción; primera invitación enviada y fila «María Soto · Mamá · invitación enviada» visible; captura `spec05-empty-state-1280.png`.
+- [x] ✅ Los 8 perfiles conservan sus filas demo con los mismos nombres, detalles y badges. — Recorrido de los 8 perfiles: filas idénticas a `data/kids.ts` (activa/ACTIVA, activo/ACTIVO, invitación enviada/PENDIENTE).
+- [x] ✅ Las tarjetas de `/kids` siguen mostrando el conteo de padres demo después de invitar. — Tras invitar: Mateo «2 padres vinculados» y Valentina «sin padres vinculados» (conteo demo).
+- [x] ✅ Solo `components/kids/linked-parents-card.tsx` y `components/kids/link-parent-dialog.tsx` agregan `"use client"`; ningún otro archivo existente lo agrega. — grep: 5 archivos con `"use client"`; los otros 3 (`login-form`, `kids-directory`, `add-kid-dialog`) preexisten de SPEC 02/03/04.
+- [x] ✅ Todos los identificadores nuevos están en inglés; los únicos textos en español son los de la UI y los valores de `data/kids.ts`. — Revisión de `data/kids.ts`, `link-parent-dialog.tsx`, `linked-parents-card.tsx`, `parent-row.tsx` e `icons.tsx`.
+- [x] ✅ `npx tsc --noEmit`, `npx eslint app components data` y `npm run build` terminan sin errores; el build sigue prerenderizando los 8 perfiles. — Exit 0 en los tres (re-corridos tras la corrección); build con `/kids/[id]` y 8 paths estáticos.
+- [x] ✅ `npm run lint` sigue fallando solo por `references/pantallas/support.js`, sin cambios en ese archivo generado. — Exit 1 con problemas solo en ese archivo; `git diff` sin cambios sobre él.
 
 Evidencia esperada en `.playwright-mcp/`: `spec05-dialog-1280.png`, `spec05-mockup-1280.png`, `spec05-validation-1280.png`, `spec05-relation-papa-1280.png`, `spec05-after-invite-1280.png`, `spec05-empty-state-1280.png`.
 

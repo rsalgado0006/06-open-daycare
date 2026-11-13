@@ -85,7 +85,7 @@ export function LinkedParentsCard({
           onClick={() => setIsDialogOpen(true)}
           className="flex cursor-pointer items-center gap-3 pt-2 text-left"
         >
-          <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border-[1.5px] border-dashed border-[var(--color-dashed)] text-media-ink">
+          <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border-[1.5px] border-dashed border-[var(--color-dashed-ring)] text-media-ink">
             <PlusOutlineIcon />
           </span>
           <span className="text-[14.5px] font-extrabold text-edit">
