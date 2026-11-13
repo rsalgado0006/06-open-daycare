@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { Avatar } from "@/components/shared/avatar";
 import { BrandMark } from "@/components/shared/brand-mark";
 import {
@@ -32,20 +32,28 @@ type AppSidebarProps = {
   activeItem: NavItemKey;
   room: string;
   teacher: Teacher;
+  publishTrigger?: ReactNode;
 };
 
-export function AppSidebar({ activeItem, room, teacher }: AppSidebarProps) {
+export function AppSidebar({
+  activeItem,
+  room,
+  teacher,
+  publishTrigger,
+}: AppSidebarProps) {
   return (
     <aside className="sticky top-0 flex h-screen w-[248px] flex-none flex-col border-r border-edge bg-card px-4 py-6">
       <BrandMark room={room} />
 
-      <span
-        title="Próximamente"
-        className="mb-[18px] flex w-full items-center justify-center gap-2 rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] p-3 text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,.75)]"
-      >
-        <PlusIcon />
-        Nueva publicación
-      </span>
+      {publishTrigger ?? (
+        <span
+          title="Próximamente"
+          className="mb-[18px] flex w-full items-center justify-center gap-2 rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] p-3 text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,.75)]"
+        >
+          <PlusIcon />
+          Nueva publicación
+        </span>
+      )}
 
       <nav className="flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => {

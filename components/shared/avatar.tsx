@@ -11,7 +11,7 @@ export type AvatarTone =
   | "violet"
   | "blue";
 
-export type AvatarSize = "sm" | "md" | "lg" | "card" | "hero";
+export type AvatarSize = "xs" | "sm" | "md" | "lg" | "card" | "hero";
 
 type AvatarProps = {
   label: string;
@@ -21,6 +21,7 @@ type AvatarProps = {
 };
 
 const SIZE_CLASSES: Record<AvatarSize, { box: string; text: string }> = {
+  xs: { box: "h-[26px] w-[26px]", text: "text-[13px]" },
   sm: { box: "h-[38px] w-[38px]", text: "text-[16px]" },
   md: { box: "h-[40px] w-[40px]", text: "text-[16px]" },
   lg: { box: "h-[44px] w-[44px]", text: "text-[17px]" },

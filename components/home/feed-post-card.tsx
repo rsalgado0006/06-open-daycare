@@ -6,19 +6,29 @@ import {
   ImageIcon,
   MegaphoneIcon,
 } from "@/components/shared/icons";
-import type { Post } from "@/data/feed";
+import { formatKidNameList, formatPostAudience, type Post } from "@/data/feed";
 
 type FeedPostCardProps = {
   post: Post;
 };
 
 export function FeedPostCard({ post }: FeedPostCardProps) {
-  const isAnnouncement = post.kind === "announcement";
+  const { target } = post;
+  const isRoom = target.type === "room";
+  const title = isRoom
+    ? "Anuncio general"
+    : formatKidNameList(
+        target.type === "kid"
+          ? [target.kidName]
+          : target.type === "kids"
+            ? target.kidNames
+            : [],
+      );
 
   return (
     <article className="rounded-[20px] border border-edge bg-card px-[22px] py-5 shadow-[0_4px_16px_-12px_rgba(120,90,60,.5)]">
       <div className="mb-[14px] flex items-center gap-3">
-        {isAnnouncement ? (
+        {isRoom ? (
           <Avatar
             label="Anuncio general"
             tone="periwinkle"
@@ -26,11 +36,11 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
             icon={<MegaphoneIcon />}
           />
         ) : (
-          <Avatar label={post.child.charAt(0)} tone="sky" size="lg" />
+          <Avatar label={title.charAt(0)} tone="sky" size="lg" />
         )}
         <div className="flex-1">
           <div className="font-heading text-[16.5px] font-semibold text-heading">
-            {isAnnouncement ? "Anuncio general" : post.child}
+            {title}
           </div>
           <div className="text-[12.5px] text-meta">
             {post.time} · {post.author}
@@ -39,7 +49,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
         <PostKindBadge kind={post.kind} />
       </div>
 
-      <div className="mb-[10px] text-[12.5px] text-meta">{post.audience}</div>
+      <div className="mb-[10px] text-[12.5px] text-meta">
+        {formatPostAudience(target)}
+      </div>
 
       <p className="m-0 text-[15.5px] leading-[1.55] text-copy">{post.body}</p>
 
